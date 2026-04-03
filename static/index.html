@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>答题宝 - HCIE-AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="drawer-overlay" id="drawer-overlay" onclick="app.toggleCatalog()"></div>
+    
+    <nav class="navbar">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
+            <span>答题宝</span>
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn active" data-view="home">首页</button>
+            <button class="nav-btn" data-view="practice">刷题模式</button>
+            <button class="nav-btn" data-view="exam">模拟考试</button>
+            <button class="nav-btn" data-view="review">刷错题</button>
+            <button class="nav-btn icon-btn" id="settings-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- 首页视图 -->
+        <section id="view-home" class="view section-active glass-panel">
+            <h1 class="hero-title">HCIE-AI 笔试智能陪练系统</h1>
+            <p class="hero-subtitle">利用大模型辅助解析，直击知识盲区，随时随地进步。</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">总题数</div>
+                    <div class="stat-value" id="stat-total">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">已作答</div>
+                    <div class="stat-value" id="stat-answered">0</div>
+                    <div class="stat-subtext" id="stat-progress-text">进度 0%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">正确率</div>
+                    <div class="stat-value" id="stat-accuracy">0%</div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-title">错题本</div>
+                    <div class="stat-value" id="stat-wrong">0</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="primary-btn" onclick="app.switchView('practice')">继续刷题</button>
+                <button class="secondary-btn btn-danger" onclick="app.resetAll()">重置所有记录</button>
+            </div>
+        </section>
+
+        <!-- 考试引导视图 -->
+        <section id="view-exam-start" class="view glass-panel">
+            <h1 class="hero-title" style="text-align:center;">模拟考试须知</h1>
+            <div style="margin: 2rem 0; text-align:center; color: var(--text-muted); line-height: 2;">
+                <p>考试模式会从题库随机抽取 100 道题。</p>
+                <p>考试时间为 60 分钟。</p>
+                <p>答题过程中不会显示对错，全部完成后统计最终得分。</p>
+                <p style="color:var(--danger)">⚠️ 反作弊提醒：考试中途如果切换网页页签或离开应用，将直接强制交卷！</p>
+            </div>
+            <div style="text-align:center;">
+                <button class="primary-btn" style="font-size:1.2rem; padding: 1rem 3rem;" onclick="app.startExam()">开始考试</button>
+            </div>
+            
+            <div id="exam-history-container" class="hidden" style="margin-top: 3rem;">
+                <h3 style="margin-bottom: 1rem; font-size:1.1rem; color:var(--text-muted);">历史成绩</h3>
+                <div id="exam-history-list" style="display: flex; gap:1rem; overflow-x: auto; padding-bottom: 1rem;">
+                    <!-- 历史卡片注入 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 通用答题视图 (用于刷题、错题、考试) -->
+        <section id="view-quiz" class="view glass-panel">
+            <div class="quiz-header">
+                <div class="quiz-info">
+                    <span class="badge" id="q-type-badge">单选题</span>
+                    <span class="q-progress" id="q-progress-text">题号: 1/100</span>
+                </div>
+                <div class="quiz-actions">
+                    <button class="outline-btn" id="toggle-catalog-btn" onclick="app.toggleCatalog()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        卡片
+                    </button>
+                    <!-- 考试倒计时 -->
+                    <span id="exam-timer" class="hidden">60:00</span>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <h2 class="question-text" id="q-text">正在加载题目...</h2>
+                <div class="options-list" id="q-options">
+                    <!-- 选项渲染区 -->
+                </div>
+                
+                <div class="answer-feedback hidden" id="q-feedback">
+                    <div class="feedback-header">
+                        <span id="feedback-icon"></span>
+                        <span id="feedback-title">回答正确</span>
+                    </div>
+                    <div class="correct-answer-text">
+                        正确答案：<strong id="q-correct-answer"></strong>
+                    </div>
+                </div>
+
+                <div class="ai-explanation-box hidden" id="q-ai-box">
+                    <div class="ai-header">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        大模型深度解析
+                    </div>
+                    <div class="ai-content" id="q-ai-content">加载中...</div>
+                </div>
+            </div>
+
+            <div class="quiz-footer">
+                <button class="secondary-btn" id="btn-prev" onclick="app.prevQuestion()">上一题</button>
+                <button class="outline-btn ai-btn hidden" id="btn-ai" onclick="app.askAI()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/></svg> 帮我解析
+                </button>
+                <button class="primary-btn hidden" id="btn-check-ans" onclick="app.checkAnswer()">提交答案</button>
+                <button class="primary-btn hidden" id="btn-submit-exam" onclick="app.submitExam()">交卷</button>
+                <button class="primary-btn" id="btn-next" onclick="app.nextQuestion()">下一题</button>
+            </div>
+        </section>
+
+        <!-- 目录抽屉 -->
+        <div class="catalog-drawer" id="catalog-drawer">
+            <div class="drawer-header">
+                <h3>答题卡</h3>
+                <button class="icon-btn close-btn" onclick="app.toggleCatalog()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="catalog-grid" id="catalog-grid"></div>
+        </div>
+
+        <!-- 成绩单视图 -->
+        <section id="view-result" class="view glass-panel">
+            <div class="result-card">
+                <h2>考试完成！</h2>
+                <div class="score-circle">
+                    <span id="exam-score">0</span>分
+                </div>
+                <div class="stats-grid" style="margin-top:2rem">
+                     <div class="stat-card"><div class="stat-title">做对</div><div class="stat-value" id="exam-correct" style="color:var(--success)">0</div></div>
+                     <div class="stat-card"><div class="stat-title">做错</div><div class="stat-value" id="exam-wrong" style="color:var(--danger)">0</div></div>
+                </div>
+                <button class="primary-btn" style="margin-top: 2rem;" onclick="app.switchView('home')">返回首页</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 设置弹窗 -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal">
+            <h2>系统设置</h2>
+            <div class="form-group">
+                <label>Qwen API Key (DashScope)</label>
+                <input type="password" id="input-api-key" placeholder="sk-xxxxxx..." class="form-control" autocomplete="off">
+                <p class="help-text">填入阿里云百炼的API Key，用于 AI 帮你解析错题，密钥仅保存在本地/个人服务器中。</p>
+            </div>
+            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem;">
+                <label style="margin-bottom: 0;">答对后自动下一题 (1.5s 延迟)</label>
+                <label class="switch">
+                    <input type="checkbox" id="input-auto-next">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <p class="help-text">开启后，练习模式下答对将自动进入下一题，答错时仍可查看解析。</p>
+            <div class="modal-actions">
+                <button class="outline-btn" onclick="document.getElementById('settings-modal').classList.remove('active')">取消</button>
+                <button class="primary-btn" onclick="app.saveSettings()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通用交互弹窗 (Alert/Confirm) -->
+    <div class="modal-overlay" id="app-confirm-modal">
+        <div class="modal confirm-modal">
+            <div class="modal-content">
+                <h2 id="confirm-title">确认操作</h2>
+                <p id="confirm-message" style="margin: 1.5rem 0; line-height: 1.6; color: var(--text-main); font-size: 1.05rem;"></p>
+                <div class="modal-actions">
+                    <button class="secondary-btn" id="confirm-cancel">取消</button>
+                    <button class="primary-btn" id="confirm-ok">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 提示 -->
+    <div class="toast" id="toast">保存成功</div>
+
+    <script src="app.js"></script>
+</body>
+</html>
