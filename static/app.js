@@ -469,7 +469,7 @@ const app = {
                      if (this.state.currentView === 'practice' || this.state.currentView === 'review') {
                          this.nextQuestion();
                      }
-                 }, 1500);
+                 }, 800);
              }
         }
 

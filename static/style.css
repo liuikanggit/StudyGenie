@@ -17,6 +17,8 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
 }
 
 body {
@@ -26,6 +28,8 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     min-height: 100vh;
+    touch-action: manipulation;
+    overscroll-behavior-y: none;
 }
 
 /* Background Gradients & Blobs */
@@ -74,6 +78,7 @@ h1.hero-title {
     font-weight: 700;
     margin-bottom: 0.5rem;
     background: linear-gradient(135deg, #fff, #a5b4fc);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -85,8 +90,10 @@ p.hero-subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2r
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
+    padding-top: calc(1rem + env(safe-area-inset-top));
     background: rgba(15, 17, 26, 0.8);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--panel-border);
     position: sticky;
     top: 0;
@@ -100,16 +107,18 @@ p.hero-subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2r
     background: transparent; color: var(--text-muted); border: none;
     font-size: 0.95rem; font-weight: 500; cursor: pointer;
     padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.2s;
+    user-select: none;
 }
 .nav-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
+.nav-btn:active { transform: scale(0.95); }
 .nav-btn.active { color: var(--primary); background: rgba(99,102,241,0.1); }
 .icon-btn { 
     padding: 0.5rem; display: flex; align-items: center; justify-content: center; 
     background: transparent; color: var(--text-muted); border: none; cursor: pointer;
     border-radius: 50%; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-user-select: none; user-select: none;
 }
-.icon-btn:hover { background: rgba(255,255,255,0.08); color: var(--text-main); }
-.close-btn:hover { transform: rotate(90deg); color: var(--danger) !important; background: rgba(239, 68, 68, 0.1) !important; }
+.icon-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.05); }
 
 /* Container & Views */
 .container {
@@ -142,13 +151,19 @@ p.hero-subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2r
     background: var(--primary); color: #fff; border: none;
     padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600;
     cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+    user-select: none;
 }
 .primary-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+.primary-btn:active { transform: scale(0.96) translateY(0); box-shadow: 0 2px 4px rgba(99,102,241,0.2); }
+
 .secondary-btn {
     background: rgba(255,255,255,0.1); color: var(--text-main); border: none;
     padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+    user-select: none;
 }
 .secondary-btn:hover { background: rgba(255,255,255,0.15); }
+.secondary-btn:active { transform: scale(0.96); }
+
 .btn-danger { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
 .btn-danger:hover { background: rgba(239, 68, 68, 0.2); }
 .outline-btn {
@@ -190,7 +205,15 @@ p.hero-subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2r
 
 .option-item.disabled { pointer-events: none; opacity: 0.9; }
 
-.quiz-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; border-top: 1px solid var(--panel-border); padding-top: 1rem;}
+.quiz-footer { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: 2rem; 
+    border-top: 1px solid var(--panel-border); 
+    padding-top: 1rem;
+    padding-bottom: env(safe-area-inset-bottom);
+}
 
 /* Feedback & AI Box */
 .answer-feedback {
@@ -232,7 +255,9 @@ p.hero-subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2r
 .modal h2 {
     margin-bottom: 1.5rem; font-weight: 700; font-size: 1.8rem;
     background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 .confirm-modal { max-width: 400px; text-align: left; }
 .form-group { margin: 1.5rem 0; }
